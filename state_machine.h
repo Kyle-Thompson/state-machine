@@ -15,27 +15,29 @@ public:
   using States = typename Machine::STATES;
   using GlobalState = typename Machine::GLOBAL_STATE;
   using Variants = typename Machine::VARIANTS;
+  constexpr static size_t SIZE = std::tuple_size<Variants>{};
+  constexpr static auto SEQ = std::make_index_sequence<SIZE>();
 
   StateMachine() : current_(static_cast<States>(0)) {}
 
   template <typename Message> void process(const Message &msg) {
-    constexpr size_t size = std::tuple_size<Variants>{};
-    auto seq = std::make_index_sequence<size>();
-    process_impl(msg, seq);
+    process_impl(msg, SEQ);
   }
 
 private:
   template <typename Message, size_t... I>
   void process_impl(const Message &msg, std::index_sequence<I...>) {
-    ([&]() {
-      if (current_ == static_cast<States>(I)) {
-        current_ = std::get<I>(variants_).process(msg, &gstate);
-        return true;
-      } else {
-        return false;
-      }
-    }() ||
-     ...);
+    (process_individual<Message, I>(msg) || ...);
+  }
+
+  template <typename Message, size_t I>
+  bool process_individual(const Message &msg) {
+    if (current_ == static_cast<States>(I)) {
+      current_ = std::get<I>(variants_).process(msg, &gstate);
+      return true;
+    } else {
+      return false;
+    }
   }
 
   States current_;
