@@ -13,4 +13,3 @@ struct YellowLight {
   template <typename Msg>
   LightState process(const Msg &msg, GlobalState *gstate);
 };
-

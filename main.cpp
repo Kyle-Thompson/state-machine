@@ -1,7 +1,8 @@
 #include "state_machine.h"
 #include "traffic_light/traffic_light.h"
 
-int main() {
+int
+main() {
   StateMachine<TrafficLight> state_machine;
   ChangeLightMsg msg;
 

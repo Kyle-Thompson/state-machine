@@ -1,17 +1,19 @@
 #pragma once
 
-#include "validator.h"
 #include <cstddef>
 #include <cstdint>
 #include <iostream>
 #include <tuple>
 #include <utility>
 
-template <typename Machine> class StateMachine {
+#include "validator.h"
+
+template <typename Machine>
+class StateMachine {
   static_assert(Validator<Machine>::validate(),
                 "enum variant and tuple order mismatch");
 
-public:
+ public:
   using States = typename Machine::STATES;
   using GlobalState = typename Machine::GLOBAL_STATE;
   using Variants = typename Machine::VARIANTS;
@@ -20,11 +22,12 @@ public:
 
   StateMachine() : current_(static_cast<States>(0)) {}
 
-  template <typename Message> void process(const Message &msg) {
+  template <typename Message>
+  void process(const Message &msg) {
     process_impl(msg, SEQ);
   }
 
-private:
+ private:
   template <typename Message, size_t... I>
   void process_impl(const Message &msg, std::index_sequence<I...>) {
     (process_individual<Message, I>(msg) || ...);

@@ -19,7 +19,7 @@ struct Validator {
     return validate_impl(SEQ);
   }
 
-private:
+ private:
   template <size_t I>
   constexpr static bool compare() {
     using Variant = std::tuple_element_t<I, Variants>;
