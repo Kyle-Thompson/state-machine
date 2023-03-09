@@ -18,6 +18,7 @@ CFREL     = -O2
 EXEC = sm_testing
 # SRCS = $(shell find . -path ./lib -prune -o -name "*.cpp" -print)
 SRCS = $(shell fd --extension cpp)
+HDRS = $(shell fd --extension h)
 OBJS = ${SRCS:.cpp=.o}
 
 all: ${EXEC}
@@ -25,7 +26,7 @@ all: ${EXEC}
 .cpp.o:
 	${CC} ${LIBS} ${STDLIB} ${CFLAGS} -o $@ -c $<
 
-${EXEC}: ${OBJS}
+${EXEC}: ${OBJS} ${HDRS}
 	${CC} ${STDLIB} -o ${EXEC} ${OBJS} ${LDFLAGS}
 
 debug: ${EXEC}

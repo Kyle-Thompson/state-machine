@@ -10,6 +10,12 @@
 struct GreenLight {
   constexpr static LightState STATE = LightState::GREEN;
 
+  GreenLight() : duration(10) {}
+  GreenLight(int duration) : duration(duration) {}
+  ~GreenLight() = default;
+
   template <typename Msg>
   LightState process(const Msg &msg, GlobalState *gstate);
+
+  int duration;
 };

@@ -10,6 +10,9 @@
 struct YellowLight {
   constexpr static LightState STATE = LightState::YELLOW;
 
+  YellowLight() = default;
+  ~YellowLight() = default;
+
   template <typename Msg>
   LightState process(const Msg &msg, GlobalState *gstate);
 };

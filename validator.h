@@ -7,13 +7,15 @@
 #include <type_traits>
 #include <utility>
 
+#include "type_list.h"
+
 template <typename Machine>
 struct Validator {
   using States = typename Machine::STATES;
   using Variants = typename Machine::VARIANTS;
 
   constexpr static bool validate() {
-    constexpr auto SIZE = std::tuple_size<Variants>{};
+    constexpr auto SIZE = Variants::list_size;
     constexpr auto SEQ = std::make_index_sequence<SIZE>();
 
     return validate_impl(SEQ);
@@ -22,7 +24,7 @@ struct Validator {
  private:
   template <size_t I>
   constexpr static bool compare() {
-    using Variant = std::tuple_element_t<I, Variants>;
+    using Variant = tl::get_t<I, Variants>;
 
     return static_cast<States>(I) == Variant::STATE;
   }
